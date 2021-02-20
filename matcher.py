@@ -14,3 +14,12 @@ def convert_categorical(question_df):
     dummified = pd.get_dummies(dummify, prefix=q_prefix, prefix_sep="_")
     dummified.set_index(question_df["Discord Username:"], inplace=True)
     return dummified
+
+# takes a matrix of scores, creates a correlation matrix, and returns pair array of matches
+def pair(pair_matrix):
+    corr_pair = pair_matrix.T.corr()
+    pairs = {}
+    for user_name, correlations in corr_pair.iteritems():
+        dropped_self = correlations.drop(labels=[user_name])
+        pairs[user_name] = dropped_self.sort_values()
+    return pairs

@@ -26,6 +26,8 @@ async def match(ctx):
     print("running matching...")
     pref_data = from_sheets.survey_to_df()
     print(pref_data)
-    print(matcher.convert_categorical(pref_data))
+    #print(matcher.convert_categorical(pref_data))
+    matrix = matcher.convert_categorical(pref_data)
+    pairs = matcher.pair(matrix)
 
 bot.run(BOT_TOKEN)
