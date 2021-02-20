@@ -139,3 +139,10 @@ cython_debug/
 
 # VS Code
 .vscode/
+
+# Project Google Keys
+credentials.json
+*.pickle
+
+# shame on Mac users
+.DS_Store
