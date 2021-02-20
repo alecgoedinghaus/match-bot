@@ -1,23 +1,21 @@
 import discord
+from discord.ext import commands
 import os
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='!')
 
-@client.event
+@bot.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print('Logged in as')
+    print(bot.user.name)
+    print(bot.user.id)
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.command()
+async def survey(ctx):
+    users = ctx.message.mentions
+    for user in users:
+        await user.send('https://forms.gle/n7xtMYnZEqwPQ1p67')
 
-    elif message.content.startswith('!survey'):
-        users = message.mentions
-        for user in users:
-            await user.send('https://forms.gle/n7xtMYnZEqwPQ1p67')
-
-
-client.run(BOT_TOKEN)
+bot.run(BOT_TOKEN)
