@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import os
 
+import from_sheets
+
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
@@ -17,5 +19,11 @@ async def survey(ctx):
     users = ctx.message.mentions
     for user in users:
         await user.send('https://forms.gle/n7xtMYnZEqwPQ1p67')
+
+@bot.command()
+async def match(ctx):
+    print("running matching...")
+    pref_data = from_sheets.survey_to_df()
+    print(pref_data)
 
 bot.run(BOT_TOKEN)
