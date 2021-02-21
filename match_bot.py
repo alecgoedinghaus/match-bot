@@ -14,10 +14,10 @@ bot = commands.Bot(command_prefix='!', intents=intents, )
 
 @bot.event
 async def on_ready():
-    print(bot.user.name + "is here to spice up your discord server today!")
+    print(bot.user.name + " is here to spice up your discord server today!")
     print(bot.user.id)
 
-@bot.command()
+@bot.command(brief="Sends a survey to every person tagged by username")
 async def survey(ctx):
     users = ctx.message.mentions
     for user in users:
@@ -25,9 +25,12 @@ async def survey(ctx):
                         Please fill out this survey at your earliest convenience!\
                         https://forms.gle/vV2DbQJduPhps4AR7')
 
-@bot.command()
+@bot.command(brief="After survey results have been obrained, match users and create 1 on 1 channels")
 async def match(ctx):
-    await ctx.message.channel.send("***Coffee Chats incoming in 3..2..1..***")
+    if(not ctx.message.author.guild_permissions.administrator):
+        await ctx.send("***HEY YOU DON'T HAVE PERMISSIONS FOR THIS COMMAND***")
+        return
+    await ctx.send("***Coffee Chats incoming in 3..2..1..***")
     pref_data = from_sheets.survey_to_df()
     matcher.populate_categorical(pref_data)
     matrix = matcher.convert_categorical(pref_data)
@@ -45,7 +48,7 @@ async def match(ctx):
 
 @bot.command()
 async def ping(ctx):
-    await ctx.message.channel.send("Pong!")
+    await ctx.message.channel.send("Po(n)g!")
 
 
 def make_reverse_lookup(member_list):
