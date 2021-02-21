@@ -1,14 +1,29 @@
-# Match Bot
+# Match Bot Com
 
 HackSC 2021 Project :smile:
 
-Authors: Jason Lim, Alec Goedinghaus, and Gaurav Kale. 
+## Description
+
+Discord bot that facilitates new connections in the workplace and among social groups. Have great conversations with like-minded colleagues you may have otherwise never met.
+
+## Authors
+
+Jason Lim (@jlimcode), Alec Goedinghaus (@alecgoedinghaus), and Gaurav Kale (@gkale15). 
+
+## Usage
 
 After cloning the git repository, run the following commands:
 
-
+(For first time `pipenv` use)
 ```bash
 pip install pipenv
+```
+
+Followed by:
+
+```bash
+cd match-bot
+pipenv install
 pipenv shell
-python example_bit.py
+python match_bot.py
 ```
