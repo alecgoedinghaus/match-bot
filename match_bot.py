@@ -9,23 +9,25 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 intents = discord.Intents.all()
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='!', intents=intents, )
 
 
 @bot.event
 async def on_ready():
-    print('Logged in as')
-    print(bot.user.name)
+    print(bot.user.name + "is here to spice up your discord server today!")
     print(bot.user.id)
 
 @bot.command()
 async def survey(ctx):
     users = ctx.message.mentions
     for user in users:
-        await user.send('https://forms.gle/vV2DbQJduPhps4AR7')
+        await user.send(' Welcome to our server!\
+                        Please fill out this survey at your earliest convenience!\
+                        https://forms.gle/vV2DbQJduPhps4AR7')
 
 @bot.command()
 async def match(ctx):
+    await ctx.message.channel.send("***Coffee Chats incoming in 3..2..1..***")
     pref_data = from_sheets.survey_to_df()
     matcher.populate_categorical(pref_data)
     matrix = matcher.convert_categorical(pref_data)
@@ -39,14 +41,16 @@ async def match(ctx):
             member_name = member_player.name
             member = lookup_table.get(member_name)
             invite = await chat_channel.create_invite()
-            await member.send("invite link: " + invite.url)
+            await member.send("Have a great conversation today :)" + invite.url)
 
 @bot.command()
 async def ping(ctx):
     await ctx.message.channel.send("Pong!")
 
+
 def make_reverse_lookup(member_list):
     return {member.name + "#" + member.discriminator: member for member in member_list}
+
 
 def clean_list(pair_generator):
     sent_list = []
@@ -58,12 +62,14 @@ def clean_list(pair_generator):
                 sent_list.append(member.name)
     return cleaned_list
 
+
 def generate_channel_name(pair_of_players):
     out = ""
     out += pair_of_players[0].name.split("#")[0]
     out += "--"
     out += pair_of_players[1].name.split("#")[0]
     return out
+
 
 def is_valid_pair(pair_of_players, sent_list):
     for player in pair_of_players:
@@ -72,5 +78,6 @@ def is_valid_pair(pair_of_players, sent_list):
         elif player.name in sent_list:
             return False
     return True
+
 
 bot.run(BOT_TOKEN)
