@@ -1,1 +1,1 @@
-web: py example_bot.py
+worker: pipenv install && pipenv run python match_bot.py
