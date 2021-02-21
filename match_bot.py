@@ -9,7 +9,7 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 intents = discord.Intents.all()
 
-bot = commands.Bot(command_prefix='!', intents=intents, )
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 @bot.event
@@ -17,15 +17,15 @@ async def on_ready():
     print(bot.user.name + " is here to spice up your discord server today!")
     print(bot.user.id)
 
-@bot.command(brief="Sends a survey to every person tagged by username")
+
+@bot.command(brief='Sends out compatibility survey to targeted user.')
 async def survey(ctx):
     users = ctx.message.mentions
     for user in users:
-        await user.send(' Welcome to our server!\
-                        Please fill out this survey at your earliest convenience!\
-                        https://forms.gle/vV2DbQJduPhps4AR7')
+        await user.send('Welcome to our server!\nPlease fill out this survey at your earliest convenience!\nhttps://forms.gle/vV2DbQJduPhps4AR7')
 
-@bot.command(brief="After survey results have been obrained, match users and create 1 on 1 channels")
+
+@bot.command(brief='Compares survey results to determine most compatible pairs of users.')
 async def match(ctx):
     if(not ctx.message.author.guild_permissions.administrator):
         await ctx.send("***HEY YOU DON'T HAVE PERMISSIONS FOR THIS COMMAND***")
@@ -44,9 +44,10 @@ async def match(ctx):
             member_name = member_player.name
             member = lookup_table.get(member_name)
             invite = await chat_channel.create_invite()
-            await member.send("Have a great conversation today :)" + invite.url)
+            await member.send("Have a great conversation :smile:/n" + invite.url)
 
-@bot.command()
+
+@bot.command(brief='Simple call command to verify the bot isn\'t dead.')
 async def ping(ctx):
     await ctx.message.channel.send("Po(n)g!")
 
