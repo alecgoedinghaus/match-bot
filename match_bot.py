@@ -23,7 +23,7 @@ async def on_ready():
 async def survey(ctx):
     users = ctx.message.mentions
     for user in users:
-        await user.send('https://forms.gle/n7xtMYnZEqwPQ1p67')
+        await user.send('https://forms.gle/vV2DbQJduPhps4AR7')
 
 
 @bot.command()

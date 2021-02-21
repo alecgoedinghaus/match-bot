@@ -1,43 +1,29 @@
 from __future__ import print_function
-import pickle
-import os.path
+import json
 import pandas as pd
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
+from oauth2client.service_account import ServiceAccountCredentials
 
-# If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-
 # The ID and range of a sample spreadsheet.
-SPREADSHEET_ID = '1mD8i0fRzlQW-giZPPkC0Ofm_E9EvF3nXZlZTxH_XX40'
+SPREADSHEET_ID = '1GXB2WQO0PXToTy_336yVI1wKRba3kVgD5xQzNuEtiDU'
 DATA_TO_PULL = 'FORM RESPONSES 1'
 
-def gsheet_api_check(SCOPES):
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-    return creds
 
-def pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL):
-    creds = gsheet_api_check(SCOPES)
+def pull_sheet_data(SCOPES, SPREADSHEET_ID, DATA_TO_PULL):
+    with open('./hacksc-test-1613884994576-1f7342579a47.json') as f:
+        creds_dict = json.load(f)
+    # creds_dict["private_key"] = creds_dict["private_key"].replace(
+    #     "\\\\n", "\n")
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(
+        creds_dict, SCOPES)
     service = build('sheets', 'v4', credentials=creds)
     sheet = service.spreadsheets()
     result = sheet.values().get(
         spreadsheetId=SPREADSHEET_ID,
         range=DATA_TO_PULL).execute()
     values = result.get('values', [])
-    
+
     if not values:
         print('No data found.')
     else:
@@ -47,8 +33,8 @@ def pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL):
         print("COMPLETE: Data copied")
         return data
 
+
 def survey_to_df():
-    data = pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL)
+    data = pull_sheet_data(SCOPES, SPREADSHEET_ID, DATA_TO_PULL)
     df = pd.DataFrame(data[1:], columns=data[0])
     return df
-    
