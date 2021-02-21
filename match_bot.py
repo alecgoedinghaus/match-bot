@@ -29,5 +29,7 @@ async def match(ctx):
     #print(matcher.convert_categorical(pref_data))
     matrix = matcher.convert_categorical(pref_data)
     pairs = matcher.pair(matrix)
+    print(pairs)
+    print(list(matcher.solve_stm(pairs)))
 
 bot.run(BOT_TOKEN)

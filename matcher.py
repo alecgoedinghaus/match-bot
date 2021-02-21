@@ -1,4 +1,8 @@
 import pandas as pd
+from matching import Player
+from matching.games import StableRoommates
+import random
+from math import floor
 
 CATEGORICAL_QUESTIONS = ["What is your idea of a good night out?",
                          "Which of these would be your ideal holiday?",
@@ -18,8 +22,16 @@ def convert_categorical(question_df):
 # takes a matrix of scores, creates a correlation matrix, and returns pair array of matches
 def pair(pair_matrix):
     corr_pair = pair_matrix.T.corr()
-    pairs = {}
+    named_rankings = {}
     for user_name, correlations in corr_pair.iteritems():
         dropped_self = correlations.drop(labels=[user_name])
-        pairs[user_name] = dropped_self.sort_values()
-    return pairs
+        named_rankings[user_name] = dropped_self.sort_values()
+    return named_rankings
+
+def solve_stm(named_rankings):
+    players = {name: prefs.index for name, prefs in named_rankings.items()}
+    game = StableRoommates.create_from_dictionary(players)
+    pairs = game.solve()
+    return pairs.items()
+
+        
