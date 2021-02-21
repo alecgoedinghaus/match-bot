@@ -1,8 +1,5 @@
 import pandas as pd
-import random
-from matching import Player
 from matching.games import StableRoommates
-from math import floor
 
 CATEGORICAL_QUESTIONS = []
 
