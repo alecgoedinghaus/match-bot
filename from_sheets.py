@@ -47,8 +47,6 @@ def pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL):
         print("COMPLETE: Data copied")
         return data
 
-
-
 def survey_to_df():
     data = pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL)
     df = pd.DataFrame(data[1:], columns=data[0])

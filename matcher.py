@@ -1,16 +1,18 @@
 import pandas as pd
+import random
 from matching import Player
 from matching.games import StableRoommates
-import random
 from math import floor
 
-CATEGORICAL_QUESTIONS = ["What is your idea of a good night out?",
-                         "Which of these would be your ideal holiday?",
-                         "How would you best describe your character?",
-                         "What are the most important characteristics in a partner?",
-                         "Are you a fundamentally happy person?"
-                         ]
+CATEGORICAL_QUESTIONS = []
 
+def populate_categorical(question_df):
+    global CATEGORICAL_QUESTIONS
+    questions = list(question_df.columns.values)
+    for question in questions[2:]:
+        if(question[-1:] == '?'):
+            CATEGORICAL_QUESTIONS.append(question)
+    return
 
 def convert_categorical(question_df):
     dummify = question_df[CATEGORICAL_QUESTIONS]
@@ -19,7 +21,6 @@ def convert_categorical(question_df):
     dummified.set_index(question_df["Discord Username:"], inplace=True)
     return dummified
 
-# takes a matrix of scores, creates a correlation matrix, and returns pair array of matches
 def pair(pair_matrix):
     corr_pair = pair_matrix.T.corr()
     named_rankings = {}
@@ -33,5 +34,3 @@ def solve_stm(named_rankings):
     game = StableRoommates.create_from_dictionary(players)
     pairs = game.solve()
     return pairs.items()
-
-        
