@@ -32,7 +32,7 @@ async def survey(ctx, member = ''):
 
 @bot.command(brief='Compares survey results to determine most compatible pairs of users.')
 async def match(ctx):
-    if(not ctx.message.author.guild_permissions.administrator):
+    if not ctx.message.author.guild_permissions.administrator:
         await ctx.send("***HEY YOU DON'T HAVE PERMISSIONS FOR THIS COMMAND***")
         return
     await ctx.send("***Coffee Chats incoming in 3..2..1..***")
@@ -43,8 +43,13 @@ async def match(ctx):
     pair_generator = matcher.solve_stm(pairs)
     lookup_table = make_reverse_lookup(ctx.guild.members)
     for pair in clean_list(pair_generator):
+        overwrites = {
+            ctx.guild.default_role: discord.PermissionOverwrite(read_messages = False),
+            lookup_table.get(pair[0].name): discord.PermissionOverwrite(read_messages = True),
+            lookup_table.get(pair[1].name): discord.PermissionOverwrite(read_messages = True)
+        }
         channel_name = generate_channel_name(pair)
-        chat_channel = await ctx.guild.create_text_channel(channel_name)
+        chat_channel = await ctx.guild.create_text_channel(channel_name, overwrites=overwrites)
         for member_player in pair:
             member_name = member_player.name
             member = lookup_table.get(member_name)
