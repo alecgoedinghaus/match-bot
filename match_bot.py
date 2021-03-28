@@ -19,15 +19,20 @@ async def on_ready():
 
 
 @bot.command(brief='Sends out compatibility survey to targeted user.')
-async def survey(ctx):
-    users = ctx.message.mentions
+async def survey(ctx, member = ''):
+    if member == "@everyone":
+        users = ctx.message.guild.members
+    else:
+        users = ctx.message.mentions
+    if not users:
+        await ctx.send('Please a valid username.')
     for user in users:
         await user.send('Welcome to our server!\nPlease fill out this survey at your earliest convenience!\nhttps://forms.gle/vV2DbQJduPhps4AR7')
 
 
 @bot.command(brief='Compares survey results to determine most compatible pairs of users.')
 async def match(ctx):
-    if(not ctx.message.author.guild_permissions.administrator):
+    if not ctx.message.author.guild_permissions.administrator:
         await ctx.send("***HEY YOU DON'T HAVE PERMISSIONS FOR THIS COMMAND***")
         return
     await ctx.send("***Coffee Chats incoming in 3..2..1..***")
@@ -38,8 +43,13 @@ async def match(ctx):
     pair_generator = matcher.solve_stm(pairs)
     lookup_table = make_reverse_lookup(ctx.guild.members)
     for pair in clean_list(pair_generator):
+        overwrites = {
+            ctx.guild.default_role: discord.PermissionOverwrite(read_messages = False),
+            lookup_table.get(pair[0].name): discord.PermissionOverwrite(read_messages = True),
+            lookup_table.get(pair[1].name): discord.PermissionOverwrite(read_messages = True)
+        }
         channel_name = generate_channel_name(pair)
-        chat_channel = await ctx.guild.create_text_channel(channel_name)
+        chat_channel = await ctx.guild.create_text_channel(channel_name, overwrites=overwrites)
         for member_player in pair:
             member_name = member_player.name
             member = lookup_table.get(member_name)
