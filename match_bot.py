@@ -19,11 +19,13 @@ async def on_ready():
 
 
 @bot.command(brief='Sends out compatibility survey to targeted user.')
-async def survey(ctx, member):
+async def survey(ctx, member = ''):
     if member == "@everyone":
         users = ctx.message.guild.members
     else:
         users = ctx.message.mentions
+    if not users:
+        await ctx.send('Please a valid username.')
     for user in users:
         await user.send('Welcome to our server!\nPlease fill out this survey at your earliest convenience!\nhttps://forms.gle/vV2DbQJduPhps4AR7')
 
