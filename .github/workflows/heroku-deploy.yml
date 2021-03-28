@@ -1,0 +1,20 @@
+name: Deploy on Heroku
+
+on:
+  push:
+    branches:
+      - main # Changing the branch here would also work
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "match-bot-com2" #Must be unique in Heroku
+          heroku_email: "alecgoedinghaus@ucla.edu"
+        env:
+          HD_BOT_TOKEN: ${{secrets.BOT_TOKEN}}
+          HD_SERVICE_ACCOUNT_KEY: ${{secrets.SERVICE_ACCOUNT_KEY}}
