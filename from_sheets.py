@@ -1,5 +1,6 @@
 from __future__ import print_function
 import json
+import os
 import pandas as pd
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
@@ -11,8 +12,8 @@ DATA_TO_PULL = 'FORM RESPONSES 1'
 
 
 def pull_sheet_data(SCOPES, SPREADSHEET_ID, DATA_TO_PULL):
-    with open('./hacksc-test-1613884994576-1f7342579a47.json') as f:
-        creds_dict = json.load(f)
+    key_string = os.getenv('SERVICE_ACCOUNT_KEY')  # json-like string
+    creds_dict = json.loads(key_string)  # parse to dict
     creds = ServiceAccountCredentials.from_json_keyfile_dict(
         creds_dict, SCOPES)
     service = build('sheets', 'v4', credentials=creds)

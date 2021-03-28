@@ -17,7 +17,7 @@ def convert_categorical(question_df):
     dummify = question_df[CATEGORICAL_QUESTIONS]
     q_prefix = ["q" + str(i) for i in range(1, len(CATEGORICAL_QUESTIONS) + 1)]
     dummified = pd.get_dummies(dummify, prefix=q_prefix, prefix_sep="_")
-    dummified.set_index(question_df.iloc[:, 1], inplace=True)
+    dummified.set_index(question_df.iloc[:, 1], inplace=True) # add Discord names as rownames
     return dummified
 
 

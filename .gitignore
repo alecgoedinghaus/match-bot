@@ -140,10 +140,5 @@ cython_debug/
 # VS Code
 .vscode/
 
-# Project Google Keys
-credentials.json
-*.pickle
-hacksc-test-1613884994576-1f7342579a47.json
-
 # shame on Mac users
 .DS_Store
