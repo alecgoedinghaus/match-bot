@@ -24,11 +24,10 @@ jobs:
       run: |
         python -m pip install pipenv
         pipenv install --dev
-    - name: Prepare venv
+    - name: Prepare env
       run: |
-          pipenv shell
-          export BOT_TOKEN=${{secrets.BOT_TOKEN}}
-          export SERVICE_ACCOUNT_KEY=${{secrets.SERVICE_ACCOUNT_KEY}}
+          pipenv run export BOT_TOKEN=${{secrets.BOT_TOKEN}}
+          pipenv run export SERVICE_ACCOUNT_KEY=${{secrets.SERVICE_ACCOUNT_KEY}}
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -37,4 +36,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        pipenv run pytest
