@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"discord.py" = "*"
+"discord.py" = "~=1.6"
 google-api-python-client = "*"
-pandas = "*"
+pandas = "~=1.2"
 matching = "*"
 oauth2client = "*"
 
